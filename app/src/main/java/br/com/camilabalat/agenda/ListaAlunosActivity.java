@@ -61,6 +61,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
                 dao.deleta(aluno);
                 dao.close();
 
+                carregaLista();
 
                 return false;
             }
