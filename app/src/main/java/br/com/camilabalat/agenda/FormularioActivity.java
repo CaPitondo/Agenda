@@ -25,18 +25,12 @@ public class FormularioActivity extends AppCompatActivity {
 
         this.helper = new FormularioHelper(this);
 
-//        Button botaoSalvar = (Button) findViewById(R.id.formulario_salvar);
-//
-//        botaoSalvar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(FormularioActivity.this, "Aluno salvo!", Toast.LENGTH_SHORT).show();
-//
-//                Intent vaiPraLista = new Intent(FormularioActivity.this,  ListaAlunosActivity.class);
-//                finish();
-////                startActivity(vaiPraLista);
-//            }
-//        });
+        Intent intent = getIntent();
+        Aluno aluno = (Aluno) intent.getSerializableExtra("aluno");
+
+        if (aluno != null){
+            helper.preencheFormulario(aluno);
+        }
     }
 
     @Override
@@ -53,10 +47,17 @@ public class FormularioActivity extends AppCompatActivity {
             case R.id.menu_formulario_ok:
                 Aluno aluno = helper.pegaAluno();
                 AlunoDAO alunoDAO = new AlunoDAO(this);
-                alunoDAO.insere(aluno);
+
+                if (aluno.getId() != null){
+                    alunoDAO.altera(aluno);
+                    Toast.makeText(FormularioActivity.this, "Aluno " + aluno.getNome() + " alterado!", Toast.LENGTH_SHORT).show();
+                }else{
+                    alunoDAO.insere(aluno);
+                    Toast.makeText(FormularioActivity.this, "Aluno " + aluno.getNome() + " salvo!", Toast.LENGTH_SHORT).show();
+                }
+
                 alunoDAO.close();
 
-                Toast.makeText(FormularioActivity.this, "Aluno " + aluno.getNome() + " salvo!", Toast.LENGTH_SHORT).show();
 
                 finish();
                 break;

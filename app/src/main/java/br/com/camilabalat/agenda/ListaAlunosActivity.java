@@ -1,6 +1,7 @@
 package br.com.camilabalat.agenda;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -32,7 +33,10 @@ public class ListaAlunosActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Aluno aluno = (Aluno)  listaAlunos.getItemAtPosition(position);
-                Toast.makeText(ListaAlunosActivity.this, "Aluno " + aluno.getNome() + " clicado!", Toast.LENGTH_SHORT).show();
+                Intent intentVaiProFormulario = new Intent(ListaAlunosActivity.this, FormularioActivity.class);
+                intentVaiProFormulario.putExtra("aluno", aluno);
+                startActivity(intentVaiProFormulario);
+//                Toast.makeText(ListaAlunosActivity.this, "Aluno " + aluno.getNome() + " clicado!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -58,10 +62,15 @@ public class ListaAlunosActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, final ContextMenu.ContextMenuInfo menuInfo) {
         MenuItem deletar = menu.add("Deletar");
+
+        MenuItem itemSite = menu.add("Visitar site");
+        Intent intentSite = new Intent(Intent.ACTION_VIEW);
+        intentSite.setData(Uri.parse("http://www.google.com"));
+        itemSite.setIntent(intentSite);
+
         deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-//                Toast.makeText(ListaAlunosActivity.this, "Clicou em deletar!", Toast.LENGTH_SHORT).show();
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
                 Aluno aluno = (Aluno) listaAlunos.getItemAtPosition(info.position);
 
